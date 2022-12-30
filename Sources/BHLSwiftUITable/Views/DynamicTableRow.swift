@@ -13,6 +13,7 @@ struct DynamicTableRow<Data: ColumnData, CellContent: View>: View {
     let data: [Data]
     let spacing: CGFloat?
     let backgroundColor: Color
+    let debugCellColor: Color
     @Binding private var maxColumnWidths: [CGFloat]
     @ViewBuilder let cellBuilder: (Data, Int) -> CellContent
     
@@ -25,18 +26,26 @@ struct DynamicTableRow<Data: ColumnData, CellContent: View>: View {
         .fixedSize(horizontal: false, vertical: true)
     }
     
-    init(_ data: [Data], maxColumnWidths: Binding<[CGFloat]>, spacing: CGFloat? = 1, background: Color = Color.yellow, @ViewBuilder cellBuilder: @escaping (Data, Int) -> CellContent) {
+    init(
+        _ data: [Data],
+        maxColumnWidths: Binding<[CGFloat]>,
+        spacing: CGFloat? = 1,
+        background: Color = Color.clear,
+        debugCellColor: Color = Color.clear,
+        @ViewBuilder cellBuilder: @escaping (Data, Int) -> CellContent
+    ) {
         self.data = data
         self._maxColumnWidths = maxColumnWidths
         self.spacing = spacing
         self.backgroundColor = background
+        self.debugCellColor = debugCellColor
         self.cellBuilder = cellBuilder
     }
     
     func cell(_ value: Data, index: Int, fill: Bool = true) -> some View {
         HStack(alignment: .top, spacing: 0) {
             cellBuilder(value, index)
-                .background { Color.green }
+                .background { debugCellColor }
             if fill {
                 Spacer()
             }

@@ -10,6 +10,8 @@ import SwiftUI
 public struct DynamicTable<ColumnContent: View, TableColumnValue: ColumnData>: View {
     
     let table: TableDefinition<TableColumnValue>
+    let headerPrimaryBackgroundColor: Color
+    let headerObscuringBackgroundColor: Color
     let columnBuilder: (TableColumnValue, String) -> ColumnContent
     @State private var maxColumnWidths: [CGFloat] = []
     
@@ -25,14 +27,18 @@ public struct DynamicTable<ColumnContent: View, TableColumnValue: ColumnData>: V
             .frame(maxWidth: .infinity)
         }
         .safeAreaInset(edge: .top) {
-            DynamicTableRow(table.headers, maxColumnWidths: $maxColumnWidths, background: Color.black.opacity(0.1)) { header, _ in
+            DynamicTableRow(
+                table.headers,
+                maxColumnWidths: $maxColumnWidths,
+                background: headerPrimaryBackgroundColor
+            ) { header, _ in
                 Text(header.title)
                     .font(.headline)
                     .padding(.vertical, 4)
                     .padding(.horizontal, 12)
             }
             .background {
-                Color.white.opacity(0.9)
+                headerObscuringBackgroundColor
             }
         }
         .onPreferenceChange(ColumnWidthsPreferenceKey.self) {
@@ -40,8 +46,15 @@ public struct DynamicTable<ColumnContent: View, TableColumnValue: ColumnData>: V
         }
     }
     
-    public init(table: TableDefinition<TableColumnValue>, @ViewBuilder columnBuilder: @escaping (TableColumnValue, String) -> ColumnContent) {
+    public init(
+        table: TableDefinition<TableColumnValue>,
+        headerPrimaryBackgroundColor: Color = Color.black.opacity(0.1),
+        headerObscuringBackgroundColor: Color = Color.white.opacity(0.9),
+        @ViewBuilder columnBuilder: @escaping (TableColumnValue, String) -> ColumnContent
+    ) {
         self.table = table
+        self.headerPrimaryBackgroundColor = headerPrimaryBackgroundColor
+        self.headerObscuringBackgroundColor = headerObscuringBackgroundColor
         self.columnBuilder = columnBuilder
     }
 }
