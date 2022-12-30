@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-struct DynamicTable<ColumnContent: View, TableColumnValue: ColumnData>: View {
+public struct DynamicTable<ColumnContent: View, TableColumnValue: ColumnData>: View {
     
     let table: TableDefinition<TableColumnValue>
     let columnBuilder: (TableColumnValue, String) -> ColumnContent
     @State private var maxColumnWidths: [CGFloat] = []
     
-    var body: some View {
+    public var body: some View {
         ScrollView {
             VStack {
                 ForEach(table.rows) { row in
@@ -40,7 +40,7 @@ struct DynamicTable<ColumnContent: View, TableColumnValue: ColumnData>: View {
         }
     }
     
-    init(table: TableDefinition<TableColumnValue>, @ViewBuilder columnBuilder: @escaping (TableColumnValue, String) -> ColumnContent) {
+    public init(table: TableDefinition<TableColumnValue>, @ViewBuilder columnBuilder: @escaping (TableColumnValue, String) -> ColumnContent) {
         self.table = table
         self.columnBuilder = columnBuilder
     }

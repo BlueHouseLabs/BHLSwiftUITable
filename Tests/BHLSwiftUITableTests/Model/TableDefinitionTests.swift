@@ -100,6 +100,7 @@ final class TableDefinitionTests: XCTestCase {
         )
         
         XCTAssertTrue(cut.isEmpty)
+        XCTAssertEqual(cut.rowCount, 0)
         
     }
     
@@ -122,6 +123,7 @@ final class TableDefinitionTests: XCTestCase {
         )
         
         XCTAssertFalse(cut.isEmpty)
+        XCTAssertEqual(cut.rowCount, 1)
         
     }
     

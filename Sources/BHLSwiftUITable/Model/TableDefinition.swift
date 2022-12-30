@@ -52,7 +52,11 @@ public struct TableDefinition<TableColumnValue: ColumnData> {
     let headers: [Header]
     let rows: [Row]
     
-    var isEmpty: Bool {
+    public var rowCount: Int {
+        rows.count
+    }
+    
+    public var isEmpty: Bool {
         rows.isEmpty
     }
     
