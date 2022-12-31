@@ -20,7 +20,7 @@ struct DynamicTableRow<Data: ColumnData, CellContent: View>: View {
     var body: some View {
         HStack(alignment: .top, spacing: spacing) {
             IndexedForEach(data) { value, index in
-                cell(value, index: index, fill: index == 0)
+                cell(value, index: index, fill: value.fillColumn)
             }
         }
         .fixedSize(horizontal: false, vertical: true)
@@ -51,7 +51,7 @@ struct DynamicTableRow<Data: ColumnData, CellContent: View>: View {
             }
         }
         .frame(maxHeight: .infinity)
-        .frame(width: index == 0 ? nil : maxColumnWidths.getOrDefaultValue(index: index), alignment: value.alignment)
+        .frame(width: fill ? nil : maxColumnWidths.getOrDefaultValue(index: index), alignment: value.alignment)
         .background {
             GeometryReader { geometry in
                 backgroundColor

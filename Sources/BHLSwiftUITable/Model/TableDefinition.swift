@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import BHLSwiftHelpers
 
 public struct TableDefinition<TableColumnValue: ColumnData> {
     
@@ -23,10 +24,10 @@ public struct TableDefinition<TableColumnValue: ColumnData> {
         let id: String
         let columns: [Column]
         
-        func headers(withTitles titles: [String]) -> [Header] {
+        func headers(withTitles titles: [String], fillColumnIndex: Int) -> [Header] {
             var headers = [Header]()
             for i in 0..<columns.count {
-                headers.append(Header(title: titles.getOrDefaultValue(index: i) ?? "", alignment: columns[i].alignment))
+                headers.append(Header(title: titles.getOrDefaultValue(index: i) ?? "", fillColumn: i == fillColumnIndex, alignment: columns[i].alignment))
             }
             return headers
         }
@@ -35,7 +36,7 @@ public struct TableDefinition<TableColumnValue: ColumnData> {
     struct Column: Identifiable, Equatable, ColumnData {
         let id: UUID
         let objectId: String
-        let padding: Bool
+        let fillColumn: Bool
         let value: TableColumnValue
         
         var alignment: Alignment {
@@ -45,6 +46,7 @@ public struct TableDefinition<TableColumnValue: ColumnData> {
     
     struct Header: ColumnData {
         let title: String
+        let fillColumn: Bool
         let alignment: Alignment
     }
     
@@ -63,21 +65,29 @@ public struct TableDefinition<TableColumnValue: ColumnData> {
     public init(
         id: String,
         headers headerTitles: [String],
-        rows inputRows: [TableColumnRow]
+        rows inputRows: [TableColumnRow],
+        fillColumnIndex passedFillColumnIndex: Int? = nil
     ) {
         self.id = id
+        
+        var fillColumnIndex = 0
+        if let passedFillColumnIndex {
+            fillColumnIndex = passedFillColumnIndex
+        } else if let firstRow = inputRows.first {
+            fillColumnIndex = firstRow.values.firstIndex { $0.fillColumn } ?? 0
+        }
         
         let rows = inputRows.map { row in
             Row(
                 id: row.id,
-                columns: (row.values).map { value in
-                    Column(id: UUID(), objectId: row.id, padding: true, value: value)
+                columns: row.values.indexedMap { value, index in
+                    Column(id: UUID(), objectId: row.id, fillColumn: index == fillColumnIndex, value: value)
                 }
             )
         }
         
         self.rows = rows
-        self.headers = rows.first?.headers(withTitles: headerTitles) ?? []
+        self.headers = rows.first?.headers(withTitles: headerTitles, fillColumnIndex: fillColumnIndex) ?? []
     }
 }
 

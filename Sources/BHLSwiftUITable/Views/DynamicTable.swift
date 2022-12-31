@@ -6,27 +6,30 @@
 //
 
 import SwiftUI
+import BHLSwiftUIHelpers
 
 public struct DynamicTable<ColumnContent: View, TableColumnValue: ColumnData>: View {
     
     let table: TableDefinition<TableColumnValue>
+    let headerPadding: CSSPadding
     let headerPrimaryBackgroundColor: Color
     let headerObscuringBackgroundColor: Color
+    let stripeColor: Color
     let columnBuilder: (TableColumnValue, String) -> ColumnContent
     @State private var maxColumnWidths: [CGFloat] = []
     
     public var body: some View {
         ScrollView {
-            VStack {
-                ForEach(table.rows) { row in
-                    DynamicTableRow(row.columns, maxColumnWidths: $maxColumnWidths) { column, _ in
+            VStack(spacing: 1) {
+                IndexedForEach(table.rows) { row, index in
+                    DynamicTableRow(row.columns, maxColumnWidths: $maxColumnWidths, background: index % 2 != 0 ? stripeColor : stripeColor.opacity(0.25)) { column, _ in
                         columnBuilder(column.value, row.id)
                     }
                 }
             }
             .frame(maxWidth: .infinity)
         }
-        .safeAreaInset(edge: .top) {
+        .safeAreaInset(edge: .top, spacing: 1) {
             DynamicTableRow(
                 table.headers,
                 maxColumnWidths: $maxColumnWidths,
@@ -34,8 +37,7 @@ public struct DynamicTable<ColumnContent: View, TableColumnValue: ColumnData>: V
             ) { header, _ in
                 Text(header.title)
                     .font(.headline)
-                    .padding(.vertical, 4)
-                    .padding(.horizontal, 12)
+                    .cssPadding(headerPadding)
             }
             .background {
                 headerObscuringBackgroundColor
@@ -48,13 +50,17 @@ public struct DynamicTable<ColumnContent: View, TableColumnValue: ColumnData>: V
     
     public init(
         table: TableDefinition<TableColumnValue>,
+        headerPadding: CSSPadding = [4, 12],
         headerPrimaryBackgroundColor: Color = Color.black.opacity(0.1),
         headerObscuringBackgroundColor: Color = Color.white.opacity(0.9),
+        stripeColor: Color = Color.black.opacity(0.05),
         @ViewBuilder columnBuilder: @escaping (TableColumnValue, String) -> ColumnContent
     ) {
         self.table = table
+        self.headerPadding = headerPadding
         self.headerPrimaryBackgroundColor = headerPrimaryBackgroundColor
         self.headerObscuringBackgroundColor = headerObscuringBackgroundColor
+        self.stripeColor = stripeColor
         self.columnBuilder = columnBuilder
     }
 }

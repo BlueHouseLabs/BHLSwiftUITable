@@ -8,5 +8,6 @@
 import SwiftUI
 
 public protocol ColumnData: Equatable {
+    var fillColumn: Bool { get }
     var alignment: Alignment { get }
 }
