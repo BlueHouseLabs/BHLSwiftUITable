@@ -17,7 +17,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/BlueHouseLabs/BHLSwiftHelpers.git", from: "0.2.0"),
-        .package(url: "https://github.com/BlueHouseLabs/BHLSwiftUIHelpers.git", from: "0.2.0"),
+        .package(url: "https://github.com/BlueHouseLabs/BHLSwiftUIHelpers.git", from: "0.2.1"),
     ],
     targets: [
         .target(

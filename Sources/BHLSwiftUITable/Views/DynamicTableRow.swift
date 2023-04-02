@@ -8,7 +8,7 @@
 import SwiftUI
 import BHLSwiftUIHelpers
 
-struct DynamicTableRow<Data: ColumnData, CellContent: View>: View {
+struct DynamicTableRow<Data: ColumnData & Identifiable, CellContent: View>: View {
     
     let data: [Data]
     let spacing: CGFloat?
@@ -24,6 +24,7 @@ struct DynamicTableRow<Data: ColumnData, CellContent: View>: View {
             }
         }
         .fixedSize(horizontal: false, vertical: true)
+        .transition(.asymmetric(insertion: .move(edge: .top), removal: .scale(scale: 0.0, anchor: .top).combined(with: .opacity)))
     }
     
     init(
@@ -55,6 +56,7 @@ struct DynamicTableRow<Data: ColumnData, CellContent: View>: View {
         .background {
             GeometryReader { geometry in
                 backgroundColor
+                    .transition(.opacity)
                     .preference(
                         key: ColumnWidthsPreferenceKey.self,
                         value: ([CGFloat](repeating: 0, count: index)) + [geometry.size.width]

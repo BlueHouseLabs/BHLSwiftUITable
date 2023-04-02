@@ -44,7 +44,8 @@ public struct TableDefinition<TableColumnValue: ColumnData> {
         }
     }
     
-    struct Header: ColumnData {
+    struct Header: ColumnData, Identifiable {
+        let id = UUID()
         let title: String
         let fillColumn: Bool
         let alignment: Alignment
