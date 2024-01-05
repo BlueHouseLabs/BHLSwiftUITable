@@ -12,7 +12,7 @@ public struct TableDefinition<TableColumnValue: ColumnData> {
     
     public struct TableColumnRow: Identifiable {
         public let id: String
-        let values: [TableColumnValue]
+        public let values: [TableColumnValue]
         
         public init(id: String, values: [TableColumnValue]) {
             self.id = id
@@ -20,11 +20,11 @@ public struct TableDefinition<TableColumnValue: ColumnData> {
         }
     }
     
-    struct Row: Identifiable, Equatable {
-        let id: String
-        let columns: [Column]
+    public struct Row: Identifiable, Equatable {
+        public let id: String
+        public let columns: [Column]
         
-        func headers(withTitles titles: [String], fillColumnIndex: Int) -> [Header] {
+        public func headers(withTitles titles: [String], fillColumnIndex: Int) -> [Header] {
             var headers = [Header]()
             for i in 0..<columns.count {
                 headers.append(Header(title: titles.getOrDefaultValue(index: i) ?? "", fillColumn: i == fillColumnIndex, alignment: columns[i].alignment))
@@ -33,27 +33,27 @@ public struct TableDefinition<TableColumnValue: ColumnData> {
         }
     }
     
-    struct Column: Identifiable, Equatable, ColumnData {
-        let id: UUID
-        let objectId: String
-        let fillColumn: Bool
-        let value: TableColumnValue
+    public struct Column: Identifiable, Equatable, ColumnData {
+        public let id: UUID
+        public let objectId: String
+        public let fillColumn: Bool
+        public let value: TableColumnValue
         
-        var alignment: Alignment {
+        public var alignment: Alignment {
             value.alignment
         }
     }
     
-    struct Header: ColumnData, Identifiable {
-        let id = UUID()
-        let title: String
-        let fillColumn: Bool
-        let alignment: Alignment
+    public struct Header: ColumnData, Identifiable {
+        public let id = UUID()
+        public let title: String
+        public let fillColumn: Bool
+        public let alignment: Alignment
     }
     
     public let id: String
-    let headers: [Header]
-    let rows: [Row]
+    public let headers: [Header]
+    public let rows: [Row]
     
     public var rowCount: Int {
         rows.count

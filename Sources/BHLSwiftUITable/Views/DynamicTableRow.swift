@@ -8,6 +8,8 @@
 import SwiftUI
 import BHLSwiftUIHelpers
 
+import BHLSwiftUITableModel
+
 struct DynamicTableRow<Data: ColumnData & Identifiable, CellContent: View>: View {
     
     let data: [Data]

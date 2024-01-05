@@ -8,6 +8,8 @@
 import SwiftUI
 import BHLSwiftUIHelpers
 
+import BHLSwiftUITableModel
+
 public struct DynamicTable<ColumnContent: View, TableColumnValue: ColumnData>: View {
     
     let table: TableDefinition<TableColumnValue>

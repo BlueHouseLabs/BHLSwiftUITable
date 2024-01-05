@@ -12,22 +12,42 @@ let package = Package(
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
+            name: "BHLSwiftUITableModel",
+            targets: ["BHLSwiftUITableModel"]
+        ),
+        .library(
             name: "BHLSwiftUITable",
-            targets: ["BHLSwiftUITable"]),
+            targets: ["BHLSwiftUITable"]
+        ),
     ],
     dependencies: [
         .package(url: "https://github.com/BlueHouseLabs/BHLSwiftHelpers.git", from: "0.2.0"),
         .package(url: "https://github.com/BlueHouseLabs/BHLSwiftUIHelpers.git", from: "0.2.1"),
     ],
     targets: [
+        
         .target(
-            name: "BHLSwiftUITable",
+            name: "BHLSwiftUITableModel",
             dependencies: [
                 .product(name: "BHLSwiftHelpers", package: "BHLSwiftHelpers"),
                 .product(name: "BHLSwiftUIHelpers", package: "BHLSwiftUIHelpers"),
-            ]),
+            ]
+        ),
+        .testTarget(
+            name: "BHLSwiftUITableModelTests",
+            dependencies: ["BHLSwiftUITableModel"]
+        ),
+        .target(
+            name: "BHLSwiftUITable",
+            dependencies: [
+                "BHLSwiftUITableModel",
+                .product(name: "BHLSwiftHelpers", package: "BHLSwiftHelpers"),
+                .product(name: "BHLSwiftUIHelpers", package: "BHLSwiftUIHelpers"),
+            ]
+        ),
         .testTarget(
             name: "BHLSwiftUITableTests",
-            dependencies: ["BHLSwiftUITable"]),
+            dependencies: ["BHLSwiftUITable"]
+        ),
     ]
 )
