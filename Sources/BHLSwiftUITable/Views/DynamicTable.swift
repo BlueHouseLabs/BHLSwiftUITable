@@ -24,10 +24,15 @@ public struct DynamicTable<ColumnContent: View, TableColumnValue: ColumnData>: V
         ScrollView {
             VStack(spacing: 1) {
                 IndexedForEach(table.rows) { row, index in
-                    DynamicTableRow(row.columns, maxColumnWidths: $maxColumnWidths, background: index % 2 != 0 ? stripeColor : stripeColor.opacity(0.25)) { column, _ in
+                    DynamicTableRow(
+                        row.columns,
+                        maxColumnWidths: $maxColumnWidths,
+                        background: index % 2 != 0 ? stripeColor : stripeColor.opacity(0.25)
+                    ) { column, _ in
                         columnBuilder(column.value, row.id)
                     }
                 }
+                Spacer(minLength: 0)
             }
             .frame(maxWidth: .infinity)
         }
@@ -38,7 +43,8 @@ public struct DynamicTable<ColumnContent: View, TableColumnValue: ColumnData>: V
                 background: headerPrimaryBackgroundColor
             ) { header, _ in
                 Text(header.title)
-                    .font(.headline)
+                    .lineLimit(1)
+                    .font(.caption)
                     .cssPadding(headerPadding)
             }
             .background {

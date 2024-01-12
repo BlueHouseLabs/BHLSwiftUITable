@@ -48,6 +48,7 @@ struct DynamicTableRow<Data: ColumnData & Identifiable, CellContent: View>: View
     func cell(_ value: Data, index: Int, fill: Bool = true) -> some View {
         HStack(alignment: .top, spacing: 0) {
             cellBuilder(value, index)
+                .font(.subheadline)
                 .background { debugCellColor }
             if fill {
                 Spacer()
